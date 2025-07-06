@@ -9,10 +9,10 @@ resource "aws_nat_gateway" "pp_nat_gateway" {
     subnet_id = var.subnet_id
 
     tags = {
-        Name = var.tags.Name
-        Owner = var.tags.Owner
-        CostCenter = var.tags.CostCenter
-        Project = var.tags.Project
+        Name        = var.tags.Name
+        Owner       = var.tags.Owner
+        CostCenter  = var.tags.CostCenter
+        Project     = var.tags.Project
     }
 
     depends_on = [aws_internet_gateway.pp_igw]

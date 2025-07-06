@@ -144,7 +144,6 @@ resource "aws_route" "private_nat_route" {
 # Rule for Route Table. Allow traffic to the VPC Endpoint for S3 in private subnets
 resource "aws_route" "private_s3_route" {
   route_table_id = aws_route_table.pp_rt_private.id
-  destination_cidr_block = "Hier muss noch die CIDR von S3 rein"                            <-- CIDR S3 Ergänzen -->
   vpc_endpoint_id = aws_vpc_endpoint.pp_s3_endpoint.id
 }
 
