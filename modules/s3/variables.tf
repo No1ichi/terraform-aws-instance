@@ -1,11 +1,5 @@
-variable subnet_id {
-    description = "The ID of the subnet where the NAT Gateway will be deployed"
-    type = string
-    default = "aws.subnet.pp_public_subnet[0].id"
-}
-
 variable "tags" {
-  description = "Tags to apply to the NAT-Gateway"
+  description = "Tags to apply to the S3 Bucket"
   type        = object({
     Name        = string
     Owner       = string
@@ -13,7 +7,7 @@ variable "tags" {
     Project     = string
   })
   default     = {
-    Name        = "pp_NAT_Gateway"
+    Name        = "phantomprotocol-bucket"
     Owner       = "Bastian"
     CostCenter  = "PP_CostOverview"
     Project     = "IU_CloudProgramming_Project"

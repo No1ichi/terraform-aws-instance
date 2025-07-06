@@ -1,6 +1,6 @@
 #Define the AWS Launch Template for the EC2 instance
-resource "aws_launch_template" "launchTemplate" {
-  name_prefix = "pp_website_launchTemplate"  
+resource "aws_launch_template" "pp_launchTemplate" {
+  name_prefix = "pp_website"  
   image_id      = var.ami
   instance_type = var.instance_type
   key_name      = var.key_name
