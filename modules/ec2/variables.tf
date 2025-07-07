@@ -24,17 +24,17 @@ variable "security_group_ids" {
 
 variable "tags" {
   description = "Tags to apply to the EC2 instance"
-  type        = object({
-    Name        = string
-    Owner       = string
-    CostCenter  = string
-    Project     = string
+  type = object({
+    Name       = string
+    Owner      = string
+    CostCenter = string
+    Project    = string
   })
-  default     = {
-    Name        = "pp_ec2_instance"
-    Owner       = "Bastian"
-    CostCenter  = "PP_CostOverview"
-    Project     = "IU_CLoudProgramming_Project"
+  default = {
+    Name       = "pp_ec2_instance"
+    Owner      = "Bastian"
+    CostCenter = "PP_CostOverview"
+    Project    = "IU_CLoudProgramming_Project"
   }
 }
 

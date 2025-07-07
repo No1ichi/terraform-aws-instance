@@ -1,13 +1,3 @@
-terraform {
-  required_version = ">= 1.0.0"
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.0"
-    }
-  }
-}
-
 provider "aws" {
     region = var.region 
 }
@@ -52,17 +42,19 @@ module nat_gateway {
 # Module for EC2 Launch Template setup
 # Module creates a Launch Template used in Auto Scaling Group for EC2 instances with user data script
 module ec2_launch_template {
-  source = "./modules/ec2_launch_template"
+  source = "./modules/ec2"
   instance_type = var.instance_type
-  ami_id = var.ami_id
-  user_data_script = var.user_data_script
+  key_name = var.key_name
+  ami = var.ami
+  user_data = var.user_data
 }
 
 # Module for ALB setup
 # Module creates an Application Load Balancer with listener and target group
 module load_balancer {
-  source = "./modules/alb"
+  source = "./modules/load_balancer"
   alb_name = var.alb_name
+  subnet_ids = var.subnet_ids
 }
 
 # Module for Auto Scaling Group setup
