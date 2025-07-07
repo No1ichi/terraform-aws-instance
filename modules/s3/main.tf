@@ -1,6 +1,6 @@
 # Setup the S3 Bucket
 resource "aws_s3_bucket" "pp_s3_bucket" {
-    bucket = var.tags.Name
+    bucket = var.bucket_name
 
     tags = {
         Name        = var.tags.Name
