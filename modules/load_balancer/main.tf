@@ -44,6 +44,6 @@ resource "aws_lb_listener" "pp_alb_listener" {
 
 resource "aws_lb_listener_certificate" "pp_alb_listener_certificate" {
     listener_arn = aws_lb_listener.pp_alb_listener.arn
-    certificate_arn = "xxx"                                                                     <!-- Replace with your ACM certificate ARN -->
+    certificate_arn = module.acm.certificate_arn
     depends_on = [aws_lb_listener.pp_alb_listener]
 }

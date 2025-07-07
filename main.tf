@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 # Module creates certificate for ALB and CloufFront
-module certificate {
+module acm {
   source = "./modules/acm"
   domain_name = var.domain_name
 }
