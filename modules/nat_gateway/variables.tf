@@ -1,7 +1,7 @@
 variable "subnet_id" {
   description = "The ID of the subnet where the NAT Gateway will be deployed"
   type        = string
-  default     = "aws.subnet.pp_public_subnet[0].id"
+  default     = "aws.subnet.public_subnet[0].id"
 }
 
 variable "tags" {
@@ -13,9 +13,9 @@ variable "tags" {
     Project    = string
   })
   default = {
-    Name       = "pp_NAT_Gateway"
-    Owner      = "Bastian"
-    CostCenter = "PP_CostOverview"
-    Project    = "IU_CloudProgramming_Project"
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
   }
 }

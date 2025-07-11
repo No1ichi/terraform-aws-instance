@@ -1,11 +1,34 @@
 variable "domain_name" {
   description = "Domain name for the ACM certificate"
-  type        = list(string)
-  default     = ["phantomprotocol.de", "www.phantomprotocol.de"]
+  type        = string
+  default     = "example.de"
 }
+
+variable "hosted_zone_id" {
+  description = "The Route 53 hosted zone ID for DNS Validation"
+  type = string
+}
+
+
 
 variable "region" {
   description = "AWS region where the ACM certificate will be created"
   type        = string
   default     = "us-central-1"
+}
+
+variable "tags" {
+  description = "Tags to apply to the registered Domain"
+  type = object({
+    Name       = string
+    Owner      = string
+    CostCenter = string
+    Project    = string
+  })
+  default = {
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
+  }
 }

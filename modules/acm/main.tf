@@ -1,10 +1,10 @@
 # Get the certificate from Amazon Certificate Manager (ACM)
-resource "aws_acm_certificate" "pp_certificate" {
-  domain_name       = [for domain in var.domain_name : domain]
+resource "aws_acm_certificate" "certificate" {
+  domain_name       = var.domain_name
   validation_method = "DNS"
 
   tags = {
-    Name       = "PP Certificate"
+    Name       = "acm-${var.tags.Name}"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
@@ -15,14 +15,9 @@ resource "aws_acm_certificate" "pp_certificate" {
   }
 }
 
-data "aws_route53_zone" "pp_zone" {
-  name         = [for domain in var.domain_name : domain]
-  private_zone = false
-}
-
-resource "aws_route53_record" "pp_certificate_validation" {
+resource "aws_route53_record" "certificate_validation" {
   for_each = {
-    for dvo in aws_acm_certificate.pp_certificate.domain_validation_options : dvo.domain_name => {
+    for dvo in aws_acm_certificate.certificate.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
@@ -32,14 +27,17 @@ resource "aws_route53_record" "pp_certificate_validation" {
   allow_overwrite = true
   name            = each.value.name
   records         = [each.value.record]
-  type            = 60
-  zone_id         = data.aws_route53_zone.pp_zone.zone_id
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = var.hosted_zone_id
+
+  depends_on = [ aws_route53_zone.hosted_zone ]
 }
 
 # Validate the certificate using DNS validation
-resource "aws_acm_certificate_validation" "pp_certificate_validation" {
-  certificate_arn         = aws_acm_certificate.pp_certificate.arn
-  validation_record_fqdns = [for record in aws_route53_record.pp_certificate_validation : record.fqdn]
+resource "aws_acm_certificate_validation" "dns_certificate_validation" {
+  certificate_arn         = aws_acm_certificate.certificate.arn
+  validation_record_fqdns = [for record in aws_route53_record.certificate_validation : record.fqdn]
 
-  depends_on = [aws_route53_record.pp_certificate_validation]
+  depends_on = [aws_route53_record.certificate_validation]
 }

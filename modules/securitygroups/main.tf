@@ -1,8 +1,8 @@
 # Setup the Security Group for the Application Load Balancer (ALB)
 # Allows Inbound HTTPS traffic from the Internet
 # Allows Outbound traffic to the Internet
-resource "aws_security_group" "pp_alb_sg" {
-    name        = "pp-alb-sg"
+resource "aws_security_group" "alb_sg" {
+    name        = var.alb_sg_name
     description = "Security Group for the Application Load Balancer (ALB)"
     vpc_id      = var.vpc_id
 }
@@ -11,7 +11,7 @@ resource "aws_security_group" "pp_alb_sg" {
 resource "aws_security_group_rule" "allow_https_from_internet" {
     type              = "ingress"
     description       = "Allows HTTPS traffic from the Internet to the ALB"
-    security_group_id = aws_security_group.pp_alb_sg.id
+    security_group_id = aws_security_group.alb_sg.id
     from_port         = 443
     to_port           = 443
     protocol          = "tcp"
@@ -22,20 +22,18 @@ resource "aws_security_group_rule" "allow_https_from_internet" {
 resource "aws_security_group_rule" "allow_outbound_internet_alb" {
     type              = "egress"
     description       = "Allows outbound traffic to the Internet from the ALB"
-    security_group_id = aws_security_group.pp_alb_sg.id
+    security_group_id = aws_security_group.alb_sg.id
     from_port         = 0
     to_port           = 0
     protocol          = "-1"
     cidr_blocks       = ["0.0.0.0/0"]
 }
 
-
-
 # Setup the Security Group for EC2 instances in the VPC
 # Allows Inbound traffic from ALB and SSH access with specific IP
 # Allows Outbound traffic to the Internet
-resource "aws_security_group" "pp_ec2_sg" { 
-    name        = "pp-ec2-sg"
+resource "aws_security_group" "ec2_sg" { 
+    name        = var.ec2_sg_name
     description = "Security Group for EC2 instances in the VPC"
     vpc_id      = var.vpc_id
 }
@@ -44,7 +42,7 @@ resource "aws_security_group" "pp_ec2_sg" {
 resource "aws_security_group_rule" "allow_http_from_alb" {
     type              = "ingress"
     description       = "Allosws HTTP traffic from ALB to EC2 instances"
-    security_group_id = aws_security_group.pp_ec2_sg.id
+    security_group_id = aws_security_group.ec2_sg.id
     from_port         = 80
     to_port           = 80
     protocol          = "tcp"
@@ -55,7 +53,7 @@ resource "aws_security_group_rule" "allow_http_from_alb" {
 resource "aws_security_group_rule" "allow_ssh_from_specific_ip" {
     type              = "ingress"
     description       = "Allows SSH access from a specific IP"
-    security_group_id = aws_security_group.pp_ec2_sg.id
+    security_group_id = aws_security_group.ec2_sg.id
     from_port         = 22
     to_port           = 22
     protocol          = "tcp"
@@ -66,7 +64,7 @@ resource "aws_security_group_rule" "allow_ssh_from_specific_ip" {
 resource "aws_security_group_rule" "allow_outbound_internet" {
     type              = "egress"
     description       = "Allows outbound traffic to the Internet"
-    security_group_id = aws_security_group.pp_ec2_sg.id
+    security_group_id = aws_security_group.ec2_sg.id
     from_port         = 0
     to_port           = 0
     protocol          = "-1"

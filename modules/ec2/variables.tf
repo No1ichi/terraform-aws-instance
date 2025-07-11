@@ -1,3 +1,9 @@
+variable "launch_template_name" {
+  description = "Name for the EC2 instance launch template"
+  type = string
+  default = "launch_template"
+}
+
 variable "ami" {
   description = "AMI ID for the EC2 instance"
   type        = string
@@ -13,7 +19,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "Name of the key pair to use for SSH access"
   type        = string
-  default     = "pp_ec2"
+  default     = "ec2_key_pair"
 }
 
 variable "security_group_ids" {
@@ -31,25 +37,15 @@ variable "tags" {
     Project    = string
   })
   default = {
-    Name       = "pp_ec2_instance"
-    Owner      = "Bastian"
-    CostCenter = "PP_CostOverview"
-    Project    = "IU_CLoudProgramming_Project"
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
   }
 }
 
 variable "user_data" {
   description = "User data script to run on instance launch"
   type        = string
-  default     = <<EOF
-#!/bin/bash
-yum update -y
-yum install -y httpd awscli
-systemctl enable httpd
-systemctl start httpd
-
-aws s3 sync s3://phantomprotocol-bucket/mywebsite/ /var/WWW/html/
-
-chown -R apache:apache /var/www/html
-EOF
+  default     = ""
 }

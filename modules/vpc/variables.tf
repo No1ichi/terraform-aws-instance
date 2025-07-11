@@ -69,10 +69,10 @@ variable "tags" {
     Project    = string
   })
   default = {
-    Name       = "pp_vpc"
-    Owner      = "Bastian"
-    CostCenter = "PP_CostOverview"
-    Project    = "IU_CloudProgramming_Project"
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
   }
 }
 

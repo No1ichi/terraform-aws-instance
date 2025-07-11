@@ -1,3 +1,9 @@
+variable "asg_name" {
+  description = "Sets the Name of the Auto Scaling Group"
+  type = string
+  default = "asg"
+}
+
 variable "auto_scaling_sizes" {
   description = "Map of Auto Scaling group sizes for different environments"
   type = object({

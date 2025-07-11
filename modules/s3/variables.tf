@@ -1,7 +1,7 @@
 variable "bucket_name" {
   description = "Name of the S3 bucket to be created"
   type        = string
-  default     = "phantomprotocol-bucket"
+  default     = "storage-bucket"
 }
 
 variable "tags" {
@@ -13,9 +13,9 @@ variable "tags" {
     Project    = string
   })
   default = {
-    Name       = "phantomprotocol-bucket"
-    Owner      = "Bastian"
-    CostCenter = "PP_CostOverview"
-    Project    = "IU_CloudProgramming_Project"
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
   }
 }

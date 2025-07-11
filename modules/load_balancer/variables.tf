@@ -1,7 +1,7 @@
 variable "alb_name" {
   description = "Name of the Application Load Balancer"
   type        = string
-  default     = "pp_alb"
+  default     = "alb_name"
 }
 
 variable "subnet_ids" {
@@ -25,9 +25,9 @@ variable "tags" {
     Project    = string
   })
   default = {
-    Name       = "pp_alb"
-    Owner      = "Bastian"
-    CostCenter = "PP_CostOverview"
-    Project    = "IU_CloudProgramming_Project"
+    Name       = "service-name"
+    Owner      = "Owner"
+    CostCenter = "Cost-Center"
+    Project    = "Project-Name"
   }
 }

@@ -9,8 +9,8 @@ variable "region" {
 # Variable is list of strings to allow multiple domain names
 variable "domain_name" {
   description = "Domain name for the ACM certificate"
-  type        = list(string)
-  default     = ["phantomprotocol.de", "www.phantomprotocol.de"]
+  type        = string
+  default     = "phantomprotocol.de"
 }
 
 # Variable for the S3 bucket name
