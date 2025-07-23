@@ -1,6 +1,92 @@
 # Setup WAF Web ACL
-resource "aws_waf2_web_acl" "web_acl" {
+resource "aws_wafv2_web_acl" "web_acl" {
+    region = "us-east-1"
     name = var.waf_name
-    scope = "CLOUDFRONT"
     description = "WAF for Website"
+    scope = "CLOUDFRONT"
+
+    default_action {
+        allow {}
+    }
+
+    visibility_config {
+        cloudwatch_metrics_enabled = true
+        metric_name = "${var.waf_name}-waf"
+        sampled_requests_enabled = true
+    }
+
+    # AWS Managed Rules - Common Rule Set
+    rule {
+        name = "AWSManagedRulesCommonRuleSet"
+        priority = 1
+
+        statement {
+            managed_rule_group_statement {
+                name = "AWSManagedRulesCommonRuleSet"
+                vendor_name = "AWS"
+            }
+        }
+        visibility_config {
+            cloudwatch_metrics_enabled = true
+            sampled_requests_enabled = true
+            metric_name = "commonRuleSet"
+        }
+    }
+
+    # AWS Managed Rules - IP Reputation List
+    rule {
+        name = "AWSManagedRulesIPReputationList"
+        priority = 2
+
+        statement {
+            managed_rule_group_statement {
+                name = "AWSManagedRulesIPReputationList"
+                vendor_name = "AWS"
+            }
+        }
+        visibility_config {
+            cloudwatch_metrics_enabled = true
+            sampled_requests_enabled = true
+            metric_name = "ipReputation"
+        }
+    }
+
+    # AWS Managed Rules - Known Bad Inputs Rule Set
+    rule {
+        name = "AWSManagedRulesKnownBadInputsRuleSet"
+        priority = 3
+
+        statement {
+            managed_rule_group_statement {
+                name = "AWSManagedRulesKnownBadInputsRuleSet"
+                vendor_name = "AWS"
+            }
+        }
+        visibility_config {
+            cloudwatch_metrics_enabled = true
+            sampled_requests_enabled = true
+            metric_name = "knownBadInputs"
+        }
+    }
+
+    # Custom Rule - IP Rate Limit Rule
+    rule {
+        name = "RateLimitRule"
+        priority = 4
+        
+        action {
+            block {}
+        }
+        statement {
+            rate_based_statement {
+                limit = 200
+                aggregate_key_type = "IP"
+            }
+        }
+        visibility_config {
+            cloudwatch_metrics_enabled = true
+            sampled_requests_enabled = true
+            metric_name = "ipRateLimit"
+        }
+    }
 }

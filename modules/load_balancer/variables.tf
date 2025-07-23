@@ -7,13 +7,11 @@ variable "alb_name" {
 variable "subnet_ids" {
   description = "List of subnet IDs where the Load Balancer will be deployed"
   type        = list(string)
-  default     = ["eu-central-1a", "eu-central-1b"]
 }
 
-variable "security_group_ids" {
-  description = "List of security group IDs to associate with the Load Balancer"
+variable "alb_security_group_id" {
+  description = "Security group ID to associate with the Load Balancer"
   type        = list(string)
-  default     = ["sg-12345678", "sg-87654321"]
 }
 
 variable "tags" {
@@ -30,4 +28,14 @@ variable "tags" {
     CostCenter = "Cost-Center"
     Project    = "Project-Name"
   }
+}
+
+variable "vpc_id" {
+  description = "The ID of the VPC"
+  type = string
+}
+
+variable "certificate_arn" {
+  description = "The ACM Certificate ARN for the Load Balancer Certificate"
+  type = string
 }

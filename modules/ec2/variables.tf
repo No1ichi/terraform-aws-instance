@@ -25,7 +25,6 @@ variable "key_name" {
 variable "security_group_ids" {
   description = "List of security group IDs to associate with the instance"
   type        = list(string)
-  default     = ["pp_EC2_SG sg-05545f0c01aea7231"]
 }
 
 variable "tags" {

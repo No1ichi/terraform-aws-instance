@@ -10,7 +10,7 @@ variable "auto_renew" {
     default = false
 }
 
-variable "adnmin_contacts" {
+variable "admin_contacts" {
     description = "Sets the admin contact details for the domain registration"
     type = object({
         address_line_1    = string
@@ -114,5 +114,15 @@ variable "tags" {
     CostCenter = "Cost-Center"
     Project    = "Project-Name"
   }
+}
+
+variable "alb_dns_name" {
+    description = "The ALB Name"
+    type = string
+}
+
+variable "alb_zone_id" {
+    description = "The ALB Zone ID"
+    type = string
 }
 

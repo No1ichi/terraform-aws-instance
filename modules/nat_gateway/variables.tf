@@ -1,7 +1,6 @@
-variable "subnet_id" {
-  description = "The ID of the subnet where the NAT Gateway will be deployed"
+variable "public_subnet_id" {
+  description = "The ID of the public subnet"
   type        = string
-  default     = "aws.subnet.public_subnet[0].id"
 }
 
 variable "tags" {

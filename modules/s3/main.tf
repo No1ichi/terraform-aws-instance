@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "s3_bucket" {
   bucket = var.bucket_name
 
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-s3"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project

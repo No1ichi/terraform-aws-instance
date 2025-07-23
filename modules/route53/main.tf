@@ -4,17 +4,17 @@ resource "aws_route53domains_domain" "domain_name" {
     auto_renew = var.auto_renew
 
   admin_contact {
-    address_line_1    = var.adnmin_contacts.address_line_1
-    city              = var.adnmin_contacts.city
-    contact_type      = var.adnmin_contacts.contact_type
-    country_code      = var.adnmin_contacts.country_code
-    email             = var.adnmin_contacts.email
-    first_name        = var.adnmin_contacts.first_name
-    last_name         = var.adnmin_contacts.last_name
-    organization_name = var.adnmin_contacts.organization_name
-    phone_number      = var.adnmin_contacts.phone_number
-    state             = var.adnmin_contacts.state
-    zip_code          = var.adnmin_contacts.zip_code
+    address_line_1    = var.admin_contacts.address_line_1
+    city              = var.admin_contacts.city
+    contact_type      = var.admin_contacts.contact_type
+    country_code      = var.admin_contacts.country_code
+    email             = var.admin_contacts.email
+    first_name        = var.admin_contacts.first_name
+    last_name         = var.admin_contacts.last_name
+    organization_name = var.admin_contacts.organization_name
+    phone_number      = var.admin_contacts.phone_number
+    state             = var.admin_contacts.state
+    zip_code          = var.admin_contacts.zip_code
   }
 
   registrant_contact {
@@ -46,7 +46,7 @@ resource "aws_route53domains_domain" "domain_name" {
   }
 
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-domain_name"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
@@ -65,11 +65,10 @@ resource "aws_route53_record" "root_alias" {
   type    = "A"
 
   alias {
-    name                   = data.aws_lb.alb.dns_name
-    zone_id                = data.aws_lb.alb.zone_id
+    name                   = var.alb_dns_name
+    zone_id                = var.alb_zone_id
     evaluate_target_health = true
   }
-  depends_on = [aws_lb.alb]
 }
 
 # Creates a record in the hosted zone for www address
@@ -79,8 +78,8 @@ resource "aws_route53_record" "www_alias" {
   type    = "A"
 
   alias {
-    name                   = data.aws_lb.alb.dns_name
-    zone_id                = data.aws_lb.alb.zone_id
+    name                   = var.alb_dns_name
+    zone_id                = var.alb_zone_id
     evaluate_target_health = true
   }
 }

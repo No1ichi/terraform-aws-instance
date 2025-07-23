@@ -6,13 +6,12 @@ resource "aws_eip" "nat_eip" {
 # Setup the NAT Gateway
 resource "aws_nat_gateway" "nat_gateway" {
   allocation_id = aws_eip.nat_eip.id
-  subnet_id     = var.subnet_id
+  subnet_id     = var.public_subnet_id
 
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-natgateway"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
   }
-  depends_on = [aws_internet_gateway.igw]
 }

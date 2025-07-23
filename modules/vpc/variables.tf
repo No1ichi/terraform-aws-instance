@@ -76,3 +76,8 @@ variable "tags" {
   }
 }
 
+variable "nat_gateway_id" {
+  description = "The ID of the created NAT-Gateway"
+  type = string
+}
+

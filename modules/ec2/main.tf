@@ -1,5 +1,5 @@
 #Define the AWS Launch Template for the EC2 instance
-resource "aws_launch_template" "launchTemplate" {
+resource "aws_launch_template" "launch_template" {
   name_prefix   = var.launch_template_name
   image_id      = var.ami
   instance_type = var.instance_type
@@ -13,7 +13,7 @@ resource "aws_launch_template" "launchTemplate" {
     resource_type = "instance"
 
     tags = {
-      Name       = var.tags.Name
+      Name       = "${var.tags.Name}-ec2"
       Owner      = var.tags.Owner
       CostCenter = var.tags.CostCenter
       Project    = var.tags.Project

@@ -2,29 +2,18 @@
 variable "region" {
   description = "The AWS region where the resources will be created"
   type        = string
-  default     = "eu-central-1"
 }
 
-# Variable for the domain name used in the ACM certificate
-# Variable is list of strings to allow multiple domain names
+# Variable for the domain name
 variable "domain_name" {
   description = "Domain name for the ACM certificate"
   type        = string
-  default     = "phantomprotocol.de"
 }
 
 # Variable for the S3 bucket name
 variable "s3_bucket_name" {
   description = "Name of the S3 bucket to be created"
   type        = string
-  default     = "phantomprotocol-bucket"
-}
-
-# Variable for the IP address used for SSH access to EC2 instances
-variable "ssh_access_ip" {
-  description = "IP address for SSH access to EC2 instances"
-  type        = string
-  default     = "xxx.xxx.xxx.xxx/32"
 }
 
 # Variable for the VPC CIDR block
@@ -32,7 +21,6 @@ variable "ssh_access_ip" {
 variable "vpc_cidr" {
   description = "IPv4 CIDR block for the VPC"
   type        = string
-  default     = "10.0.0.0/16"
 }
 
 # Variable for the public subnets setup
@@ -43,18 +31,6 @@ variable "public_subnets" {
     az         = string
     cidr_block = string
   }))
-  default = {
-    # Public Subnet 1
-    public_subnet1 = {
-      az         = "eu-central-1a"
-      cidr_block = "10.0.1.0/24"
-    }
-    # Public Subnet 2
-    public_subnet2 = {
-      az         = "eu-central-1b"
-      cidr_block = "10.0.2.0/24"
-    }
-  }
 }
 
 # Variable for the private subnets setup
@@ -65,18 +41,6 @@ variable "private_subnets" {
     az         = string
     cidr_block = string
   }))
-  default = {
-    # Private Subnet 1
-    private_subnet1 = {
-      az         = "eu-central-1a"
-      cidr_block = "10.0.3.0/24"
-    }
-    # Private Subnet 2
-    private_subnet2 = {
-      az         = "eu-central-1b"
-      cidr_block = "10.0.4.0/24"
-    }
-  }
 }
 
 # Variable for VPC endpoints setup
@@ -87,14 +51,19 @@ variable "vpc_endpoints" {
     service_name = string
     type         = string
   }))
-  default = {
-    # VPC Endpoint for S3
-    s3_endpoint = {
-      service_name = "com.amazonaws.eu-central-1.s3"
-      type         = "Gateway"
-    }
-  }
 }
+
+# Variable for the IP address used for SSH access to EC2 instances
+variable "ssh_access_ip" {
+  description = "IP address for SSH access to EC2 instances"
+  type        = string
+}
+
+
+
+
+
+
 
 # Variable for the NAT Gateway subnet ID
 # Defines the Subnet where the NAT Gateway will be deployed

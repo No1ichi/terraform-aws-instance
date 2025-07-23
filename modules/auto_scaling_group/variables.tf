@@ -13,7 +13,7 @@ variable "auto_scaling_sizes" {
   })
   default = {
     min_size     = 1
-    max_size     = 2
+    max_size     = 3
     desired_size = 1
   }
 }
@@ -21,5 +21,14 @@ variable "auto_scaling_sizes" {
 variable "subnet_ids" {
   description = "List of subnet IDs for the Auto Scaling group"
   type        = list(string)
-  default     = ["eu-central-1a", "eu-central-1b"]
+}
+
+variable "launch_template_id" {
+  description = "The ID of the launch_template"
+  type = string
+}
+
+variable "alb_target_group_arn" {
+  description = "The ARN of the ALB"
+  type = string
 }

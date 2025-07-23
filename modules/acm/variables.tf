@@ -1,20 +1,11 @@
 variable "domain_name" {
   description = "Domain name for the ACM certificate"
   type        = string
-  default     = "example.de"
 }
 
 variable "hosted_zone_id" {
   description = "The Route 53 hosted zone ID for DNS Validation"
   type = string
-}
-
-
-
-variable "region" {
-  description = "AWS region where the ACM certificate will be created"
-  type        = string
-  default     = "us-central-1"
 }
 
 variable "tags" {

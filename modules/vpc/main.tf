@@ -7,7 +7,7 @@ resource "aws_vpc" "vpc" {
   enable_dns_hostnames = true
 
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-vpc"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
@@ -36,7 +36,7 @@ resource "aws_subnet" "private_subnet" {
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-igw"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
@@ -51,7 +51,7 @@ resource "aws_vpc_endpoint" "s3_endpoint" {
   route_table_ids   = [aws_route_table.rt_private.id]
 
   tags = {
-    Name       = var.tags.Name
+    Name       = "${var.tags.Name}-s3_endpoint"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project
@@ -86,7 +86,7 @@ resource "aws_network_acl" "private_acl" {
   subnet_ids = [for subnet in aws_subnet.private_subnet : subnet.id]
 
   egress {
-    protocol  = "HTTP"
+    protocol  = "tcp"
     rule_no   = 400
     action    = "allow"
     from_port = 80
@@ -94,7 +94,7 @@ resource "aws_network_acl" "private_acl" {
   }
 
   ingress {
-    protocol  = "HTTP"
+    protocol  = "tcp"
     rule_no   = 300
     action    = "allow"
     from_port = 80
@@ -138,13 +138,14 @@ resource "aws_route_table" "rt_private" {
 resource "aws_route" "private_nat_route" {
   route_table_id         = aws_route_table.rt_private.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat_gateway.id
+  nat_gateway_id         = var.nat_gateway_id
 }
 
 # Rule for Route Table. Allow traffic to the VPC Endpoint for S3 in private subnets
 resource "aws_route" "private_s3_route" {
   route_table_id  = aws_route_table.rt_private.id
   vpc_endpoint_id = aws_vpc_endpoint.s3_endpoint.id
+  destination_prefix_list_id = aws_vpc_endpoint.s3_endpoint.prefix_list_id
 }
 
 # Associate the private subnets with the private route table

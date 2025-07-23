@@ -2,7 +2,7 @@
 resource "aws_autoscaling_group" "asg" {
   name = var.asg_name
   launch_template {
-    id      = aws_launch_template.launch_template.id
+    id      = var.launch_template_id
     version = "$Latest"
   }
   min_size            = var.auto_scaling_sizes.min_size
@@ -16,7 +16,5 @@ resource "aws_autoscaling_group" "asg" {
 # Associate the Auto Scaling Group with the Load Balancer
 resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.asg.name
-  lb_target_group_arn    = aws_lb_target_group.alb_target_group.arn
-
-  depends_on = [aws_autoscaling_group.asg, aws_lb_target_group.alb_target_group]
+  lb_target_group_arn    = var.alb_target_group_arn
 }

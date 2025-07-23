@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "allow_http_from_alb" {
     from_port         = 80
     to_port           = 80
     protocol          = "tcp"
-    source_security_group_id = var.alb_sg_id
+    source_security_group_id = aws_security_group.alb_sg.id
 }
 
 # Inbound rule for SSH access from a specific IP
