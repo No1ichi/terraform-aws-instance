@@ -29,3 +29,29 @@ resource "aws_s3_bucket_public_access_block" "s3_public_access_block" {
 
   depends_on = [aws_s3_bucket.s3_bucket]
 }
+
+# S3 Bucket Policy to set the bucket connection policy
+resource "aws_s3_bucket_policy" "ec2readonly" {
+  bucket = "s3_bucket"
+    policy = jsonencode({
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.iam_role_name}"
+        },
+        "Action": [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        "Resource": [
+          "arn:aws:s3:::example-bucket",
+          "arn:aws:s3:::example-bucket/*"
+        ]
+      }
+    ]
+  })
+}
+
+data "aws_caller_identity" "current" {}

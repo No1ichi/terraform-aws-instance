@@ -6,15 +6,96 @@ variable "region" {
 
 # Variable for the domain name
 variable "domain_name" {
-  description = "Domain name for the ACM certificate"
+  description = "The name of the domain"
   type        = string
 }
+
+# Tags for tagging the services. Name variable is ${"service-name"}-moduleName
+variable "tags" {
+  description = "Tags to apply to the registered Domain"
+  type = object({
+    Name       = string
+    Owner      = string
+    CostCenter = string
+    Project    = string
+  })
+}
+
+###############################
+### ======= ROUTE53 ======= ###
+###############################
+
+# Variable for the admin contacts Route53 domain name regsitration
+variable "admin_contacts" {
+  description = "Sets the admin contact details for the domain registration"
+  type = object({
+    address_line_1    = string
+    city              = string
+    country_code      = string
+    email             = string
+    first_name        = string
+    last_name         = string
+    organization_name = string
+    phone_number      = string
+    state             = string
+    zip_code          = string
+  })
+}
+
+# Variable for the registrant contacts Route53 domain name regsitration
+variable "registrant_contacts" {
+  description = "Sets the registrant contact details for the domain registration"
+  type = object({
+    address_line_1    = string
+    city              = string
+    country_code      = string
+    email             = string
+    first_name        = string
+    last_name         = string
+    organization_name = string
+    phone_number      = string
+    state             = string
+    zip_code          = string
+  })
+}
+
+# Variable for the tech contacts Route53 domain name regsitration
+variable "tech_contacts" {
+  description = "Sets the tech contact details for the domain registration"
+  type = object({
+    address_line_1    = string
+    city              = string
+    country_code      = string
+    email             = string
+    first_name        = string
+    last_name         = string
+    organization_name = string
+    phone_number      = string
+    state             = string
+    zip_code          = string
+  })
+}
+
+# Variable for setting the auto-renew function for the registered dns-name to on or off. Default is off
+variable "auto_renew" {
+  description = "Sets the Auto-Renew On or Off. Default is off"
+  type        = bool
+  default     = false
+}
+
+##########################
+### ======= S3 ======= ###
+##########################
 
 # Variable for the S3 bucket name
 variable "s3_bucket_name" {
   description = "Name of the S3 bucket to be created"
   type        = string
 }
+
+###########################
+### ======= VPC ======= ###
+###########################
 
 # Variable for the VPC CIDR block
 # Defines the IPv4 CIDR block for the VPC
@@ -53,32 +134,43 @@ variable "vpc_endpoints" {
   }))
 }
 
+###########################
+### ======= WAF ======= ###
+###########################
+
+variable "waf_name" {
+  description = "The Name of the AWS WAF"
+  type        = string
+  default     = "WAF"
+}
+
+##################################
+### ======= Sec. Group ======= ###
+##################################
+
 # Variable for the IP address used for SSH access to EC2 instances
 variable "ssh_access_ip" {
   description = "IP address for SSH access to EC2 instances"
   type        = string
 }
 
+#####################################
+### ======= Load Balancer ======= ###
+#####################################
 
-
-
-
-
-
-# Variable for the NAT Gateway subnet ID
-# Defines the Subnet where the NAT Gateway will be deployed
-variable "subnet_id" {
-  description = "The ID of the subnet where the NAT Gateway will be deployed"
+# Variable for the ALB name
+variable "alb_name" {
+  description = "Sets the Name of the Application Load Balancer"
   type        = string
-  default     = "aws.subnet.pp_public_subnet[0].id"
 }
 
-# Variable for the AMI ID used for the EC2 instance
-# Defines the Amazon Machine Image (AMI) ID for the EC2 instance
-variable "ami" {
-  description = "AMI ID for the EC2 instance"
+###########################################
+### ======= EC2 Launch Template ======= ###
+###########################################
+
+variable "launch_template_name" {
+  description = "Name for the EC2 instance launch template"
   type        = string
-  default     = "ami-003c9adf81de74b40"
 }
 
 # Variable for the EC2 instance type
@@ -88,11 +180,12 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-# Variable for the key pair name used for SSH access to EC2 instances
-variable "key_name" {
-  description = "Name of the key pair to use for SSH access"
+# Variable for the AMI ID used for the EC2 instance
+# Defines the Amazon Machine Image (AMI) ID for the EC2 instance
+variable "ami" {
+  description = "AMI ID for the EC2 instance"
   type        = string
-  default     = "pp_ec2"
+  default     = "ami-003c9adf81de74b40"
 }
 
 # Variable for the user data script used in the EC2 Launch Template
@@ -113,19 +206,19 @@ chown -R apache:apache /var/www/html
 EOF
 }
 
-# Variable for the ALB name
-variable "alb_name" {
-  description = "Name of the Application Load Balancer"
+variable "public_key" {
+  description = "The Public Key connected with the EC2 Instances"
   type        = string
-  default     = "pp-alb"
 }
 
-# Variable for the subnet IDs used in the Auto Scaling group
-# This variable is a list of subnet IDs where the Auto Scaling group will launch instances
-variable "subnet_ids" {
-  description = "List of subnet IDs for the Auto Scaling group"
-  type        = list(string)
-  default     = ["eu-central-1a", "eu-central-1b"]
+##########################################
+### ======= Auto Scaling Group ======= ###
+##########################################
+
+# sets the Name for the Auto Scaling Group
+variable "asg_name" {
+  description = "The Name for the Auto Scaling Group"
+  type        = string
 }
 
 # Variable for the Auto Scaling group sizes
@@ -137,9 +230,4 @@ variable "auto_scaling_sizes" {
     max_size     = number
     desired_size = number
   })
-  default = {
-    min_size     = 1
-    max_size     = 2
-    desired_size = 1
-  }
 }

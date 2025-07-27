@@ -11,11 +11,6 @@ variable "auto_scaling_sizes" {
     max_size     = number
     desired_size = number
   })
-  default = {
-    min_size     = 1
-    max_size     = 3
-    desired_size = 1
-  }
 }
 
 variable "subnet_ids" {

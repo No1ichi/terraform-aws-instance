@@ -1,7 +1,11 @@
+variable "public_key" {
+  description = "The Value of the Public Key"
+  type = string
+}
+
 variable "launch_template_name" {
   description = "Name for the EC2 instance launch template"
   type = string
-  default = "launch_template"
 }
 
 variable "ami" {
@@ -16,10 +20,9 @@ variable "instance_type" {
   default     = "t2.micro"
 }
 
-variable "key_name" {
-  description = "Name of the key pair to use for SSH access"
-  type        = string
-  default     = "ec2_key_pair"
+variable "iamProfileName" {
+  description = "The Name of the S3 Read Only Access IAM Instance Profile"
+  type = string
 }
 
 variable "security_group_ids" {

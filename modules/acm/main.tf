@@ -4,7 +4,7 @@ resource "aws_acm_certificate" "certificate" {
   validation_method = "DNS"
 
   tags = {
-    Name       = "acm-${var.tags.Name}"
+    Name       = "${var.tags.Name}-acm"
     Owner      = var.tags.Owner
     CostCenter = var.tags.CostCenter
     Project    = var.tags.Project

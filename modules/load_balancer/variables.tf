@@ -1,7 +1,6 @@
 variable "alb_name" {
   description = "Name of the Application Load Balancer"
   type        = string
-  default     = "alb_name"
 }
 
 variable "subnet_ids" {

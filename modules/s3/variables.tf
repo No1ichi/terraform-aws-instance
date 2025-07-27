@@ -1,7 +1,6 @@
 variable "bucket_name" {
   description = "Name of the S3 bucket to be created"
   type        = string
-  default     = "storage-bucket"
 }
 
 variable "tags" {
@@ -18,4 +17,9 @@ variable "tags" {
     CostCenter = "Cost-Center"
     Project    = "Project-Name"
   }
+}
+
+variable "iam_role_name" {
+  description = "The Name of the IAM Role"
+  type = string
 }

@@ -6,7 +6,6 @@ resource "aws_route53domains_domain" "domain_name" {
   admin_contact {
     address_line_1    = var.admin_contacts.address_line_1
     city              = var.admin_contacts.city
-    contact_type      = var.admin_contacts.contact_type
     country_code      = var.admin_contacts.country_code
     email             = var.admin_contacts.email
     first_name        = var.admin_contacts.first_name
@@ -17,10 +16,9 @@ resource "aws_route53domains_domain" "domain_name" {
     zip_code          = var.admin_contacts.zip_code
   }
 
-  registrant_contact {
+    registrant_contact {
     address_line_1    = var.registrant_contacts.address_line_1
     city              = var.registrant_contacts.city
-    contact_type      = var.registrant_contacts.contact_type
     country_code      = var.registrant_contacts.country_code
     email             = var.registrant_contacts.email
     first_name        = var.registrant_contacts.first_name
@@ -31,10 +29,9 @@ resource "aws_route53domains_domain" "domain_name" {
     zip_code          = var.registrant_contacts.zip_code
   }
 
-  tech_contact {
+    tech_contact {
     address_line_1    = var.tech_contacts.address_line_1
     city              = var.tech_contacts.city
-    contact_type      = var.tech_contacts.contact_type
     country_code      = var.tech_contacts.country_code
     email             = var.tech_contacts.email
     first_name        = var.tech_contacts.first_name

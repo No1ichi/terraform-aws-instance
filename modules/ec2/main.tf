@@ -1,9 +1,19 @@
+#Set the Key Pair for EC2 instances
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name = "ec2-key-pair"
+  public_key = var.public_key
+}
+
 #Define the AWS Launch Template for the EC2 instance
 resource "aws_launch_template" "launch_template" {
   name_prefix   = var.launch_template_name
   image_id      = var.ami
   instance_type = var.instance_type
-  key_name      = var.key_name
+  key_name      = aws_key_pair.ec2_key_pair.key_name
+
+  iam_instance_profile {
+    name = var.iamProfileName
+  }
 
   vpc_security_group_ids = var.security_group_ids
 

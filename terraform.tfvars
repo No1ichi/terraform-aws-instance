@@ -1,10 +1,54 @@
 # Main Region for Setup
 region = "eu-central-1"
-### Domain Name
+# Domain Name
 domain_name = "phantomprotocol.de"
-### S3 Bucket Config
+# Tags for Service Tagging
+tags = {
+  Name       = "PP"
+  Owner      = "Bastian"
+  CostCenter = "PhantomProtocol"
+  Project    = "IU-CloudProgramming-PP"
+}
+# Route 53
+admin_contacts = {
+  address_line_1    = "My-Street"
+  city              = "Munich"
+  country_code      = "GER"
+  email             = "writetobastian@gmail.com"
+  first_name        = "Bastian"
+  last_name         = "Schwab"
+  organization_name = "IU"
+  phone_number      = "012345678"
+  state             = "Bavaria"
+  zip_code          = "81735"
+}
+registrant_contacts = {
+  address_line_1    = "My-Street"
+  city              = "Munich"
+  country_code      = "GER"
+  email             = "writetobastian@gmail.com"
+  first_name        = "Bastian"
+  last_name         = "Schwab"
+  organization_name = "IU"
+  phone_number      = "012345678"
+  state             = "Bavaria"
+  zip_code          = "81735"
+}
+tech_contacts = {
+  address_line_1    = "My-Street"
+  city              = "Munich"
+  country_code      = "GER"
+  email             = "writetobastian@gmail.com"
+  first_name        = "Bastian"
+  last_name         = "Schwab"
+  organization_name = "IU"
+  phone_number      = "012345678"
+  state             = "Bavaria"
+  zip_code          = "81735"
+}
+# S3 Bucket Config
 s3_bucket_name = "phantomprotocol-bucket"
-### VPC Config
+# VPC Config
 vpc_cidr = "10.0.0.0/16"
 public_subnets = {
   public_subnet1 = {
@@ -32,5 +76,24 @@ vpc_endpoints = {
     type         = "Gateway"
   }
 }
-###
+
+# AWS WAF
+waf_name = "PP-WAF"
+
+# Security Groups EC2 SSH Access IP
 ssh_access_ip = "188.192.74.171"
+
+# Application Load Balancer
+alb_name = "PP-ALB"
+
+#ec2 launch template
+public_key           = "/.ssh/id_rsa_aws_terraform.pub"
+launch_template_name = "PP-LaunchTemplate"
+
+#Auto Scaling Group
+asg_name = "PP-ASG"
+auto_scaling_sizes = {
+  desired_size = 1
+  min_size     = 1
+  max_size     = 3
+}

@@ -1,7 +1,6 @@
 variable "domain_name" {
     description = "Sets the Name for the domain"
     type = string
-    default = "example.com"
 }
 
 variable "auto_renew" {
@@ -15,7 +14,6 @@ variable "admin_contacts" {
     type = object({
         address_line_1    = string
         city              = string
-        contact_type      = string
         country_code      = string
         email             = string
         first_name        = string
@@ -25,27 +23,13 @@ variable "admin_contacts" {
         state             = string
         zip_code          = string
     })
-    default = {
-        address_line_1    = "Main Street"
-        city              = "City"
-        contact_type      = "Company"
-        country_code      = "GER"
-        email             = "example@email.com"
-        first_name        = "Jon"
-        last_name         = "Doe"
-        organization_name = "Organization"
-        phone_number      = "0049 123 456 789"
-        state             = "State"
-        zip_code          = "987654"
-    }
 }
 
 variable "registrant_contacts" {
-    description = "Sets the registrant contact details for the domain registration"
+    description = "Sets the admin contact details for the domain registration"
     type = object({
         address_line_1    = string
         city              = string
-        contact_type      = string
         country_code      = string
         email             = string
         first_name        = string
@@ -55,27 +39,13 @@ variable "registrant_contacts" {
         state             = string
         zip_code          = string
     })
-    default = {
-        address_line_1    = "Main Street"
-        city              = "City"
-        contact_type      = "Company"
-        country_code      = "GER"
-        email             = "example@email.com"
-        first_name        = "Jon"
-        last_name         = "Doe"
-        organization_name = "Organization"
-        phone_number      = "0049 123 456 789"
-        state             = "State"
-        zip_code          = "987654"
-    }
 }
 
 variable "tech_contacts" {
-    description = "Sets the tech contact details for the domain registration"
+    description = "Sets the admin contact details for the domain registration"
     type = object({
         address_line_1    = string
         city              = string
-        contact_type      = string
         country_code      = string
         email             = string
         first_name        = string
@@ -85,19 +55,6 @@ variable "tech_contacts" {
         state             = string
         zip_code          = string
     })
-    default = {
-        address_line_1    = "Main Street"
-        city              = "City"
-        contact_type      = "Company"
-        country_code      = "GER"
-        email             = "example@email.com"
-        first_name        = "Jon"
-        last_name         = "Doe"
-        organization_name = "Organization"
-        phone_number      = "0049 123 456 789"
-        state             = "State"
-        zip_code          = "987654"
-    }
 }
 
 variable "tags" {
