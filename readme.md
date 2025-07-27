@@ -5,15 +5,13 @@ Dieses Terraform-Projekt erstellt eine skalierbare, hochverfügbare und sichere 
 ## Inhaltsverzeichnis
 
 - Terraform AWS Architektur
-- Voraussetzungen
+- [Voraussetzungen](#voraussetzungen)
 - [Architekturübersicht](#architekturübersicht)
 - [Verwendete Terraform-Module](#verwendete-terraform-module)
 - [Einrichtung und Bereitstellung](#einrichtung-und-bereitstellung)
 - [Konfiguration](#konfiguration)
-- [Wichtige Outputs](#wichtige-outputs)
 - [Bereinigung](#bereinigung)
-- [Beitrag](#beitrag)
-- [Lizenz](#lizenz)
+
 
 ## Voraussetzungen
 
