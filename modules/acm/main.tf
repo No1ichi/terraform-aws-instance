@@ -45,7 +45,7 @@ resource "aws_acm_certificate_validation" "dns_certificate_validation" {
 
 # Get the certificate from Amazon Certificate Manager (ACM) for CloudFront
 resource "aws_acm_certificate" "cf_certificate" {
-  region          = "us-east-1"
+  region            = "us-east-1"
   domain_name       = var.domain_name
   validation_method = "DNS"
 

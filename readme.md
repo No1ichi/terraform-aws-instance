@@ -132,10 +132,10 @@ Hier sind die  wichtigsten konfigurierbaren Variablen:
 
 ## Bereinigung
 
-Um alle von diesem Terraform-Projekt erstellten Ressourcen aus deinem AWS-Konto zu entfernen, führe den folgenden Befehl aus:
+Um alle von diesem Terraform-Projekt erstellten Ressourcen aus dem AWS-Konto zu entfernen, führe den folgenden Befehl aus:
 
 ```bash
 terraform destroy
 ```
 
-Du wirst aufgefordert, yes einzugeben, um die Aktion zu bestätigen. Sei vorsichtig, da dies alle damit verbundenen Ressourcen dauerhaft löscht.
+Du wirst aufgefordert, yes einzugeben, um die Aktion zu bestätigen. Achtung, alle damit verbundenen Ressourcen werden dauerhaft gelöscht.
