@@ -7,3 +7,14 @@ terraform {
     }
   }
 }
+
+provider "aws" {
+  profile = "terraform-testing"
+  region  = "eu-central-1"
+}
+
+provider "aws" {
+  profile = "terraform-testing"
+  alias   = "us-east-1"
+  region  = "us-east-1"
+}

@@ -21,68 +21,6 @@ variable "tags" {
   })
 }
 
-###############################
-### ======= ROUTE53 ======= ###
-###############################
-
-# Variable for the admin contacts Route53 domain name regsitration
-variable "admin_contacts" {
-  description = "Sets the admin contact details for the domain registration"
-  type = object({
-    address_line_1    = string
-    city              = string
-    country_code      = string
-    email             = string
-    first_name        = string
-    last_name         = string
-    organization_name = string
-    phone_number      = string
-    state             = string
-    zip_code          = string
-  })
-}
-
-# Variable for the registrant contacts Route53 domain name regsitration
-variable "registrant_contacts" {
-  description = "Sets the registrant contact details for the domain registration"
-  type = object({
-    address_line_1    = string
-    city              = string
-    country_code      = string
-    email             = string
-    first_name        = string
-    last_name         = string
-    organization_name = string
-    phone_number      = string
-    state             = string
-    zip_code          = string
-  })
-}
-
-# Variable for the tech contacts Route53 domain name regsitration
-variable "tech_contacts" {
-  description = "Sets the tech contact details for the domain registration"
-  type = object({
-    address_line_1    = string
-    city              = string
-    country_code      = string
-    email             = string
-    first_name        = string
-    last_name         = string
-    organization_name = string
-    phone_number      = string
-    state             = string
-    zip_code          = string
-  })
-}
-
-# Variable for setting the auto-renew function for the registered dns-name to on or off. Default is off
-variable "auto_renew" {
-  description = "Sets the Auto-Renew On or Off. Default is off"
-  type        = bool
-  default     = false
-}
-
 ##########################
 ### ======= S3 ======= ###
 ##########################

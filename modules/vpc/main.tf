@@ -63,20 +63,40 @@ resource "aws_network_acl" "public_acl" {
   vpc_id     = aws_vpc.vpc.id
   subnet_ids = [for subnet in aws_subnet.public_subnet : subnet.id]
 
-  egress {
+  ingress {
+    rule_no   = 100
+    cidr_block = "0.0.0.0/0"
     protocol  = "tcp"
-    rule_no   = 200
     action    = "allow"
     from_port = 443
     to_port   = 443
   }
 
-  ingress {
+    ingress {
+    rule_no   = 110
     protocol  = "tcp"
-    rule_no   = 100
     action    = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port   = 65535
+  }
+
+    egress {
+    rule_no   = 100
+    protocol  = "tcp"
+    action    = "allow"
+    cidr_block = "0.0.0.0/0"
     from_port = 443
     to_port   = 443
+  }
+
+   egress {
+    rule_no   = 110
+    protocol  = "tcp"
+    action    = "allow"
+    cidr_block = "0.0.0.0/0"
+    from_port = 1024
+    to_port   = 65535
   }
 }
 
@@ -85,17 +105,19 @@ resource "aws_network_acl" "private_acl" {
   vpc_id     = aws_vpc.vpc.id
   subnet_ids = [for subnet in aws_subnet.private_subnet : subnet.id]
 
-  egress {
+  ingress {
+    rule_no   = 100
+    cidr_block = var.vpc_cidr
     protocol  = "tcp"
-    rule_no   = 400
     action    = "allow"
     from_port = 80
     to_port   = 80
   }
 
-  ingress {
+  egress {
+    rule_no = 100
+    cidr_block = "0.0.0.0/0"
     protocol  = "tcp"
-    rule_no   = 300
     action    = "allow"
     from_port = 80
     to_port   = 80
@@ -141,22 +163,9 @@ resource "aws_route" "private_nat_route" {
   nat_gateway_id         = var.nat_gateway_id
 }
 
-# Rule for Route Table. Allow traffic to the VPC Endpoint for S3 in private subnets
-resource "aws_route" "private_s3_route" {
-  route_table_id  = aws_route_table.rt_private.id
-  vpc_endpoint_id = aws_vpc_endpoint.s3_endpoint.id
-  destination_prefix_list_id = aws_vpc_endpoint.s3_endpoint.prefix_list_id
-}
-
 # Associate the private subnets with the private route table
 resource "aws_route_table_association" "rta_private" {
   for_each       = aws_subnet.private_subnet
   subnet_id      = each.value.id
   route_table_id = aws_route_table.rt_private.id
-}
-
-# Associate the S3 VPC Endpoint with the private route table
-resource "aws_vpc_endpoint_route_table_association" "s3_rta" {
-  vpc_endpoint_id = aws_vpc_endpoint.s3_endpoint.id
-  route_table_id  = aws_route_table.rt_private.id
 }

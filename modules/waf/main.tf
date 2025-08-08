@@ -1,6 +1,5 @@
 # Setup WAF Web ACL
 resource "aws_wafv2_web_acl" "web_acl" {
-    region = "us-east-1"
     name = var.waf_name
     description = "WAF for Website"
     scope = "CLOUDFRONT"
@@ -20,6 +19,11 @@ resource "aws_wafv2_web_acl" "web_acl" {
         name = "AWSManagedRulesCommonRuleSet"
         priority = 1
 
+        override_action {
+          none {
+          }
+        }
+
         statement {
             managed_rule_group_statement {
                 name = "AWSManagedRulesCommonRuleSet"
@@ -35,12 +39,17 @@ resource "aws_wafv2_web_acl" "web_acl" {
 
     # AWS Managed Rules - IP Reputation List
     rule {
-        name = "AWSManagedRulesIPReputationList"
+        name = "AWSManagedRulesAmazonIpReputationList"
         priority = 2
+
+        override_action {
+          none {
+          }
+        }
 
         statement {
             managed_rule_group_statement {
-                name = "AWSManagedRulesIPReputationList"
+                name = "AWSManagedRulesAmazonIpReputationList"
                 vendor_name = "AWS"
             }
         }
@@ -55,6 +64,11 @@ resource "aws_wafv2_web_acl" "web_acl" {
     rule {
         name = "AWSManagedRulesKnownBadInputsRuleSet"
         priority = 3
+
+        override_action {
+          none {
+          }
+        }
 
         statement {
             managed_rule_group_statement {

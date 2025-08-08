@@ -8,7 +8,7 @@ variable "subnet_ids" {
   type        = list(string)
 }
 
-variable "alb_security_group_id" {
+variable "alb_security_group_ids" {
   description = "Security group ID to associate with the Load Balancer"
   type        = list(string)
 }

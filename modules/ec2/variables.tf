@@ -26,7 +26,7 @@ variable "iamProfileName" {
 }
 
 variable "security_group_ids" {
-  description = "List of security group IDs to associate with the instance"
+  description = "Security group ID to associate with the instance"
   type        = list(string)
 }
 

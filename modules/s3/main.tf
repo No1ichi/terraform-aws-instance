@@ -10,14 +10,6 @@ resource "aws_s3_bucket" "s3_bucket" {
   }
 }
 
-# Setup S3 ACL
-resource "aws_s3_bucket_acl" "s3_acl" {
-  bucket = aws_s3_bucket.s3_bucket.id
-  acl    = "private"
-
-  depends_on = [aws_s3_bucket.s3_bucket]
-}
-
 # Block public access to the S3 bucket
 resource "aws_s3_bucket_public_access_block" "s3_public_access_block" {
   bucket = aws_s3_bucket.s3_bucket.id
@@ -32,7 +24,7 @@ resource "aws_s3_bucket_public_access_block" "s3_public_access_block" {
 
 # S3 Bucket Policy to set the bucket connection policy
 resource "aws_s3_bucket_policy" "ec2readonly" {
-  bucket = "s3_bucket"
+  bucket = aws_s3_bucket.s3_bucket.bucket
     policy = jsonencode({
     "Version": "2012-10-17",
     "Statement": [
@@ -46,8 +38,8 @@ resource "aws_s3_bucket_policy" "ec2readonly" {
           "s3:ListBucket"
         ],
         "Resource": [
-          "arn:aws:s3:::example-bucket",
-          "arn:aws:s3:::example-bucket/*"
+          "arn:aws:s3:::${aws_s3_bucket.s3_bucket.bucket}",
+          "arn:aws:s3:::${aws_s3_bucket.s3_bucket.bucket}/*"
         ]
       }
     ]

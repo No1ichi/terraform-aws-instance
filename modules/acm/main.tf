@@ -45,7 +45,7 @@ resource "aws_acm_certificate_validation" "dns_certificate_validation" {
 
 # Get the certificate from Amazon Certificate Manager (ACM) for CloudFront
 resource "aws_acm_certificate" "cf_certificate" {
-  region            = "us-east-1"
+  provider = aws.us_east_1
   domain_name       = var.domain_name
   validation_method = "DNS"
 
@@ -80,6 +80,7 @@ resource "aws_route53_record" "cf_certificate_validation" {
 
 # Validate the certificate using DNS validation
 resource "aws_acm_certificate_validation" "dns_cf_certificate_validation" {
+  provider = aws.us_east_1
   certificate_arn         = aws_acm_certificate.cf_certificate.arn
   validation_record_fqdns = [for record in aws_route53_record.cf_certificate_validation : record.fqdn]
 

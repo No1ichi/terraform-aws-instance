@@ -1,7 +1,7 @@
 #Set the Key Pair for EC2 instances
 resource "aws_key_pair" "ec2_key_pair" {
   key_name = "ec2-key-pair"
-  public_key = var.public_key
+  public_key = file(var.public_key)
 }
 
 #Define the AWS Launch Template for the EC2 instance

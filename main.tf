@@ -1,12 +1,3 @@
-provider "aws" {
-  region = var.region
-}
-
-provider "aws" {
-  alias  = "us-east-1"
-  region = "us-east-1"
-}
-
 #Module IAM Roles
 # Creates an IAM Role with S3 Read Only Access for EC2 Instances
 module "iam_roles" {
@@ -16,15 +7,10 @@ module "iam_roles" {
 # Module Route 53
 # Module creates and registers the domain. Availability Check must be done manually before
 module "route53" {
-  source              = "./modules/route53"
-  domain_name         = var.domain_name
-  alb_dns_name        = module.load_balancer.load_balancer_dns_name
-  alb_zone_id         = module.load_balancer.load_balancer_id
-  admin_contacts      = var.admin_contacts
-  registrant_contacts = var.registrant_contacts
-  tech_contacts       = var.tech_contacts
-  tags                = var.tags
-  auto_renew          = var.auto_renew
+  source       = "./modules/route53"
+  domain_name  = var.domain_name
+  alb_dns_name = module.load_balancer.load_balancer_dns_name
+  alb_zone_id  = module.load_balancer.load_balancer_zone_id
 }
 
 # Module Amazon Certificate Manager
@@ -34,6 +20,10 @@ module "acm" {
   hosted_zone_id = module.route53.hosted_zone_id
   domain_name    = var.domain_name
   tags           = var.tags
+  providers = {
+    aws           = aws
+    aws.us_east_1 = aws.us-east-1
+  }
 }
 
 # S3 Bucket
@@ -62,6 +52,9 @@ module "vpc" {
 module "waf" {
   source   = "./modules/waf"
   waf_name = var.waf_name
+  providers = {
+    aws = aws.us-east-1
+  }
 }
 
 # Module for Security Groups setup
@@ -76,20 +69,20 @@ module "securitygroups" {
 # Module creates one NAT Gateway in public subnet for services in private subnets to access the Internet
 module "nat_gateway" {
   source           = "./modules/nat_gateway"
-  public_subnet_id = module.vpc.public_subnet_id
+  public_subnet_id = module.vpc.public_subnet_id[0]
   tags             = var.tags
 }
 
 # Module for ALB setup
 # Module creates an Application Load Balancer with listener and target group
 module "load_balancer" {
-  source                = "./modules/load_balancer"
-  subnet_ids            = module.vpc.public_subnet_id
-  alb_security_group_id = module.securitygroups.alb_security_group_id
-  vpc_id                = module.vpc.vpc_id
-  certificate_arn       = module.acm.certificate_arn
-  tags                  = var.tags
-  alb_name              = var.alb_name
+  source                 = "./modules/load_balancer"
+  subnet_ids             = module.vpc.public_subnet_id
+  alb_security_group_ids = [module.securitygroups.alb_security_group_id]
+  vpc_id                 = module.vpc.vpc_id
+  certificate_arn        = module.acm.certificate_arn
+  tags                   = var.tags
+  alb_name               = var.alb_name
 }
 
 # Module for EC2 Launch Template setup
@@ -100,7 +93,7 @@ module "ec2_launch_template" {
   instance_type        = var.instance_type
   ami                  = var.ami
   user_data            = var.user_data
-  security_group_ids   = module.securitygroups.ec2_security_group_id
+  security_group_ids   = [module.securitygroups.ec2_security_group_id]
   iamProfileName       = module.iam_roles.iamProfileName
   public_key           = var.public_key
   tags                 = var.tags

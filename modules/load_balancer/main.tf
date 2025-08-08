@@ -3,7 +3,7 @@ resource "aws_lb" "alb" {
     name               = var.alb_name
     load_balancer_type = "application"
     internal           = false
-    security_groups    = var.alb_security_group_id
+    security_groups    = var.alb_security_group_ids
     subnets            = var.subnet_ids
 
     tags = {
@@ -35,15 +35,11 @@ resource "aws_lb_listener" "alb_listener" {
     protocol          = "HTTPS"
     ssl_policy        = "ELBSecurityPolicy-2016-08"
 
+    certificate_arn = var.certificate_arn
+
     default_action {
         type             = "forward"
         target_group_arn = aws_lb_target_group.alb_target_group.arn
     }
 
-}
-
-resource "aws_lb_listener_certificate" "alb_listener_certificate" {
-    listener_arn = aws_lb_listener.alb_listener.arn
-    certificate_arn = var.certificate_arn
-    depends_on = [aws_lb_listener.alb_listener]
 }
