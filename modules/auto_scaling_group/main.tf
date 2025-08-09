@@ -13,6 +13,24 @@ resource "aws_autoscaling_group" "asg" {
 
 }
 
+# Set the Target Tracking Policy and Parameters
+resource "aws_autoscaling_policy" "target_tracking_cpu" {
+  name = "${var.asg_name}-tt-cpu"
+  autoscaling_group_name = aws_autoscaling_group.asg.name
+  policy_type = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+    target_value = 60
+    disable_scale_in = false
+  }
+
+  estimated_instance_warmup = 300
+
+}
+
 # Associate the Auto Scaling Group with the Load Balancer
 resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.asg.name

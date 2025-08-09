@@ -59,5 +59,5 @@ asg_name = "PP-ASG"
 auto_scaling_sizes = {
   desired_size = 1
   min_size     = 1
-  max_size     = 3
+  max_size     = 2
 }
