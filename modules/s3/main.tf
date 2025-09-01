@@ -47,3 +47,27 @@ resource "aws_s3_bucket_policy" "ec2readonly" {
 }
 
 data "aws_caller_identity" "current" {}
+
+# Load index.html and logo.png into the created S3 bucket
+locals {
+  site_dir = "${path.root}/website"
+  site_files = fileset (local.site_dir, "**")
+  mime = {
+    html = "text/html"
+    png = "image/png"
+  }
+}
+
+resource "aws_s3_object" "website_html" {
+  bucket = var.bucket_name
+  key = "mywebsite/index.html"
+  source = "${path.root}/website/index.html"
+  content_type = "text/html"
+}
+
+resource "aws_s3_object" "website_png" {
+  bucket = var.bucket_name
+  key = "mywebsite/logo.png"
+  source = "${path.root}/website/images/logo.png"
+  content_type = "image/png"
+}

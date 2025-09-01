@@ -58,6 +58,20 @@ resource "aws_vpc_endpoint" "s3_endpoint" {
   }
 }
 
+# Setup an EC2 Instance Connect Endpoint for SSH Connection to EC2 Instances
+resource "aws_ec2_instance_connect_endpoint" "ec2_ic_endpoint" {
+  for_each           = aws_subnet.private_subnet
+  subnet_id          = each.value.id
+  security_group_ids = var.security_group_ids
+  
+  tags = {
+    Name       = "${var.tags.Name}-ec2_ic_endpoint"
+    Owner      = var.tags.Owner
+    CostCenter = var.tags.CostCenter
+    Project    = var.tags.Project
+  }
+}
+
 # Setup the Network ACLs for the public subnets
 resource "aws_network_acl" "public_acl" {
   vpc_id     = aws_vpc.vpc.id
@@ -81,8 +95,17 @@ resource "aws_network_acl" "public_acl" {
     to_port   = 65535
   }
 
+  egress {
+    rule_no = 100
+    protocol = "tcp"
+    action = "allow"
+    cidr_block = var.vpc_cidr
+    from_port = 80
+    to_port = 80
+  }
+
     egress {
-    rule_no   = 100
+    rule_no   = 110
     protocol  = "tcp"
     action    = "allow"
     cidr_block = "0.0.0.0/0"
@@ -91,7 +114,7 @@ resource "aws_network_acl" "public_acl" {
   }
 
    egress {
-    rule_no   = 110
+    rule_no   = 120
     protocol  = "tcp"
     action    = "allow"
     cidr_block = "0.0.0.0/0"
@@ -114,6 +137,41 @@ resource "aws_network_acl" "private_acl" {
     to_port   = 80
   }
 
+  ingress {
+    rule_no = 110
+    cidr_block = var.vpc_cidr
+    protocol = "tcp"
+    action = "allow"
+    from_port = 22
+    to_port = 22
+  }
+
+  ingress {
+    rule_no    = 120
+    cidr_block = var.vpc_cidr
+    protocol   = "tcp"
+    action     = "allow"
+    from_port  = 1024
+    to_port    = 65535
+  }
+
+  ingress {
+  rule_no    = 125
+  cidr_block = "0.0.0.0/0"
+  protocol   = "tcp"
+  action     = "allow"
+  from_port  = 1024
+  to_port    = 65535
+}
+ingress {
+  rule_no    = 126
+  cidr_block = "0.0.0.0/0"
+  protocol   = "udp"
+  action     = "allow"
+  from_port  = 1024
+  to_port    = 65535
+}
+
   egress {
     rule_no = 100
     cidr_block = "0.0.0.0/0"
@@ -122,6 +180,34 @@ resource "aws_network_acl" "private_acl" {
     from_port = 80
     to_port   = 80
   }
+
+  egress {
+    rule_no = 110
+    cidr_block = "0.0.0.0/0"
+    protocol = "tcp"
+    action = "allow"
+    from_port = 443
+    to_port = 443
+  }
+
+  egress {
+    rule_no = 120
+    cidr_block = "0.0.0.0/0"
+    protocol = "tcp"
+    action = "allow"
+    from_port = 1024
+    to_port = 65535
+  }
+
+  egress {
+  rule_no    = 125
+  cidr_block = "0.0.0.0/0"
+  protocol   = "udp"
+  action     = "allow"
+  from_port  = 53
+  to_port    = 53
+}
+
 }
 
 # Setup the route table for the public subnets

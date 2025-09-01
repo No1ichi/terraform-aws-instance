@@ -23,7 +23,6 @@ variable "public_subnets" {
   }
 }
 
-
 variable "private_subnets" {
   description = "Map of private subnets with Availability Zone and CIDR block"
   type = map(object({
@@ -78,5 +77,10 @@ variable "tags" {
 variable "nat_gateway_id" {
   description = "The ID of the created NAT-Gateway"
   type = string
+}
+
+variable "security_group_ids" {
+  description = "Security group ID to associate with the instance"
+  type        = list(string)
 }
 

@@ -33,3 +33,8 @@ variable "tags" {
     Project    = "Project-Name"
   }
 }
+
+variable "domain_name" {
+    description = "Sets the Name for the domain"
+    type = string
+}

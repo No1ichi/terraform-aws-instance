@@ -60,6 +60,17 @@ resource "aws_security_group_rule" "allow_ssh_from_specific_ip" {
     cidr_blocks       = [var.ssh_access_ip]
 }
 
+# Inbound rule for connection from EC2 Instance Connect Endpoint to EC2
+resource "aws_security_group_rule" "ec2_ssh_from_eice" {
+  type                     = "ingress"
+  description              = "Allows SSH from EICE to EC2"
+  security_group_id        = aws_security_group.ec2_sg.id
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.eice_sg.id
+}
+
 # Outbound rule for the EC2 security group
 resource "aws_security_group_rule" "allow_outbound_internet" {
     type              = "egress"
@@ -69,4 +80,22 @@ resource "aws_security_group_rule" "allow_outbound_internet" {
     to_port           = 0
     protocol          = "-1"
     cidr_blocks       = ["0.0.0.0/0"]
+}
+
+# Setup the Security Group for EC2 Instance Connect Endpoint
+# Allows Outbound traffic to the EC2 Instances
+resource "aws_security_group" "eice_sg" {
+  name        = var.eice_sg_name
+  description = "Security Group for EC2 Instance Connect Endpoint"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_security_group_rule" "eice_ssh_to_ec2" {
+    type =  "egress"
+    description = "Allows SSH Connection from EICE to EC2"
+    security_group_id = aws_security_group.eice_sg.id
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = var.private_subnets_cidr_blocks
 }

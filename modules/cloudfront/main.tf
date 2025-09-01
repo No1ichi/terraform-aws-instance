@@ -9,9 +9,9 @@ data "aws_cloudfront_origin_request_policy" "all_viewer" {
 resource "aws_cloudfront_cache_policy" "videos" {
   name = "video-cache-policy"
 
-  default_ttl = 604800    # 7 Tage
+  default_ttl = 604800    # 7 Days
   max_ttl     = 604800
-  min_ttl     = 7200      # 2 Stunde
+  min_ttl     = 7200      # 2 Hours
 
   parameters_in_cache_key_and_forwarded_to_origin {
     headers_config {
@@ -27,9 +27,14 @@ resource "aws_cloudfront_cache_policy" "videos" {
 }
 
 resource "aws_cloudfront_distribution" "cloudfront" {
+    aliases = [
+      var.domain_name,
+      "www.${var.domain_name}"
+    ]
+
     origin {
         domain_name = var.alb_dns_name
-        origin_id = var.alb_id
+        origin_id = "alb-origin"
 
       custom_origin_config {
         http_port              = 80
@@ -43,7 +48,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
     is_ipv6_enabled = true
 
     default_cache_behavior {
-        target_origin_id = var.alb_id
+        target_origin_id = "alb-origin"
         viewer_protocol_policy = "redirect-to-https"
 
         cache_policy_id          = data.aws_cloudfront_cache_policy.caching_optimized.id
@@ -55,7 +60,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
     ordered_cache_behavior {
       path_pattern = "/images/*"
-      target_origin_id = var.alb_id
+      target_origin_id = "alb-origin"
       viewer_protocol_policy = "redirect-to-https"
 
       cache_policy_id          = data.aws_cloudfront_cache_policy.caching_optimized.id
@@ -67,7 +72,7 @@ resource "aws_cloudfront_distribution" "cloudfront" {
 
     ordered_cache_behavior {
       path_pattern = "/videos/*"
-      target_origin_id = var.alb_id
+      target_origin_id = "alb-origin"
       viewer_protocol_policy = "redirect-to-https"
 
       cache_policy_id = aws_cloudfront_cache_policy.videos.id

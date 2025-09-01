@@ -3,12 +3,12 @@ variable "domain_name" {
     type = string
 }
 
-variable "alb_dns_name" {
+variable "cloudfront_dns_name" {
     description = "The ALB Name"
     type = string
 }
 
-variable "alb_zone_id" {
+variable "cloudfront_zone_id" {
     description = "The ALB Zone ID"
     type = string
 }

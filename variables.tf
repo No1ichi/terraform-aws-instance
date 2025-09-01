@@ -138,7 +138,9 @@ yum install -y httpd awscli
 systemctl enable httpd
 systemctl start httpd
 
-aws s3 sync s3://phantomprotocol-bucket/mywebsite/ /var/WWW/html/
+mkdir -p /var/www/html
+
+aws s3 sync s3://phantomprotocol-bucket/mywebsite/ /var/www/html/
 
 chown -R apache:apache /var/www/html
 EOF

@@ -1,6 +1,7 @@
 # Get the certificate from Amazon Certificate Manager (ACM)
 resource "aws_acm_certificate" "certificate" {
   domain_name       = var.domain_name
+  subject_alternative_names = ["www.${var.domain_name}"]
   validation_method = "DNS"
 
   tags = {
@@ -47,6 +48,7 @@ resource "aws_acm_certificate_validation" "dns_certificate_validation" {
 resource "aws_acm_certificate" "cf_certificate" {
   provider = aws.us_east_1
   domain_name       = var.domain_name
+  subject_alternative_names = ["www.${var.domain_name}"]
   validation_method = "DNS"
 
   tags = {

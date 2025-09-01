@@ -23,7 +23,14 @@ resource "aws_lb_target_group" "alb_target_group" {
 
     health_check {
         enabled = true
-        path    = "/"
+        protocol = "HTTP"
+        port = 80
+        path    = "/index.html"
+        matcher = "200-399"
+        timeout = 5
+        interval = 15
+        healthy_threshold = 2
+        unhealthy_threshold = 2
     }
 
 }

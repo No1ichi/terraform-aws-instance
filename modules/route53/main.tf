@@ -11,8 +11,8 @@ resource "aws_route53_record" "root_alias" {
   type    = "A"
 
   alias {
-    name                   = var.alb_dns_name
-    zone_id                = var.alb_zone_id
+    name                   = var.cloudfront_dns_name
+    zone_id                = var.cloudfront_zone_id
     evaluate_target_health = true
   }
 }
@@ -24,8 +24,8 @@ resource "aws_route53_record" "www_alias" {
   type    = "A"
 
   alias {
-    name                   = var.alb_dns_name
-    zone_id                = var.alb_zone_id
+    name                   = var.cloudfront_dns_name
+    zone_id                = var.cloudfront_zone_id
     evaluate_target_health = true
   }
 }

@@ -17,3 +17,8 @@ output "cidr_block" {
   description = "The CIDR Block of the VPC"
   value = aws_vpc.vpc.cidr_block
 }
+
+output "private_subnet_cidrs" {
+  description = "The CIDR Blocks of the private Subnets"
+  value = [for subnet in aws_subnet.private_subnet : subnet.cidr_block]
+}

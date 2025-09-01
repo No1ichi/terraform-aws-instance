@@ -5,12 +5,13 @@ module "iam_roles" {
 }
 
 # Module Route 53
-# Module creates and registers the domain. Availability Check must be done manually before
+# Module creates records in the hosted zone from the registered domain
 module "route53" {
-  source       = "./modules/route53"
-  domain_name  = var.domain_name
-  alb_dns_name = module.load_balancer.load_balancer_dns_name
-  alb_zone_id  = module.load_balancer.load_balancer_zone_id
+  source      = "./modules/route53"
+  domain_name = var.domain_name
+
+  cloudfront_dns_name = module.cloudfront.cloudfront_name
+  cloudfront_zone_id  = module.cloudfront.cloudfront_zone_id
 }
 
 # Module Amazon Certificate Manager
@@ -38,13 +39,14 @@ module "s3" {
 # Module VPC
 # Module creates a VPC with 2 public and private subnets, one Internet Gateway and one VPC Endpoint for S3 Bucket.
 module "vpc" {
-  source          = "./modules/vpc"
-  vpc_cidr        = var.vpc_cidr
-  public_subnets  = var.public_subnets
-  private_subnets = var.private_subnets
-  vpc_endpoints   = var.vpc_endpoints
-  nat_gateway_id  = module.nat_gateway.nat_gateway_id
-  tags            = var.tags
+  source             = "./modules/vpc"
+  vpc_cidr           = var.vpc_cidr
+  public_subnets     = var.public_subnets
+  private_subnets    = var.private_subnets
+  vpc_endpoints      = var.vpc_endpoints
+  nat_gateway_id     = module.nat_gateway.nat_gateway_id
+  tags               = var.tags
+  security_group_ids = [module.securitygroups.eice_security_group_id]
 }
 
 #Module Web App. Firewall WAF
@@ -60,9 +62,10 @@ module "waf" {
 # Module for Security Groups setup
 # Module creates security groups for ALB and EC2 instances with specific rules
 module "securitygroups" {
-  source        = "./modules/securitygroups"
-  vpc_id        = module.vpc.vpc_id
-  ssh_access_ip = var.ssh_access_ip
+  source                      = "./modules/securitygroups"
+  vpc_id                      = module.vpc.vpc_id
+  ssh_access_ip               = var.ssh_access_ip
+  private_subnets_cidr_blocks = module.vpc.private_subnet_cidrs
 }
 
 # Module for NAT Gateway setup
@@ -94,9 +97,10 @@ module "ec2_launch_template" {
   ami                  = var.ami
   user_data            = var.user_data
   security_group_ids   = [module.securitygroups.ec2_security_group_id]
-  iamProfileName       = module.iam_roles.iamProfileName
+  iamProfileName       = module.iam_roles.ec2s3readonlyprofile
   public_key           = var.public_key
   tags                 = var.tags
+  depends_on           = [module.s3]
 }
 
 # Module for Auto Scaling Group setup
@@ -119,4 +123,5 @@ module "cloudfront" {
   acm_cloudfront_certificate = module.acm.cf_certificate_arn
   alb_id                     = module.load_balancer.load_balancer_id
   tags                       = var.tags
+  domain_name                = var.domain_name
 }
